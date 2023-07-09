@@ -121,6 +121,75 @@ function checkWin(current) {
   }
 }
 
+// === From AI:
+
+// function checkWin(current) {
+//   const currentPlayer = current.attributes.player.value;
+//   const col = gameGrid.findIndex((arr) => arr.includes(current));
+//   const row = gameGrid[col].indexOf(current);
+
+//   // Check horizontal
+//   let count = 0;
+//   for (let i = Math.max(0, col - 3); i <= Math.min(3, col); i++) {
+//     console.log(gameGrid[i][row]);
+//     if (gameGrid[row][i].attributes.player.value === currentPlayer) {
+//       count++;
+//       if (count === 4) {
+//         youWon(currentPlayer);
+//         return;
+//       }
+//     } else {
+//       count = 0;
+//     }
+//   }
+
+//   // Check vertical
+//   count = 0;
+//   for (let j = Math.max(0, row - 3); j <= Math.min(2, row); j++) {
+//     if (gameGrid[j][col].attributes.player.value === currentPlayer) {
+//       count++;
+//       if (count === 4) {
+//         youWon(currentPlayer);
+//         return;
+//       }
+//     } else {
+//       count = 0;
+//     }
+//   }
+
+//   // Check diagonal (top-left to bottom-right)
+//   count = 0;
+//   const startOffset = Math.min(col, row, 3);
+//   const endOffset = Math.min(6 - col, 5 - row, 3);
+//   for (let k = startOffset; k <= endOffset; k++) {
+//     if (gameGrid[row - k][col - k].attributes.player.value === currentPlayer) {
+//       count++;
+//       if (count === 4) {
+//         youWon(currentPlayer);
+//         return;
+//       }
+//     } else {
+//       count = 0;
+//     }
+//   }
+
+//   // Check diagonal (bottom-left to top-right)
+//   count = 0;
+//   const startOffset2 = Math.min(col, 5 - row, 3);
+//   const endOffset2 = Math.min(6 - col, row, 3);
+//   for (let l = startOffset2; l <= endOffset2; l++) {
+//     if (gameGrid[row - l][col + l].attributes.player.value === currentPlayer) {
+//       count++;
+//       if (count === 4) {
+//         youWon(currentPlayer);
+//         return;
+//       }
+//     } else {
+//       count = 0;
+//     }
+//   }
+// }
+
 function youWon(currentPlayer) {
   console.log(`You Won Playerl ${currentPlayer}`);
   document.body.setAttribute("finished", "true");
