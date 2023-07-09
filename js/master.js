@@ -1,5 +1,10 @@
 let columns = document.getElementsByClassName("column");
 let player = 1;
+let allCells = document.getElementsByClassName("cell");
+
+for (let i = 0; i < allCells.length; i++) {
+  allCells[i].setAttribute("player", 0);
+}
 
 for (let i = 0; i < columns.length; i++) {
   columns[i].addEventListener("click", () => {
@@ -22,6 +27,7 @@ function clicked(column) {
   } else {
     player = 1;
   }
+  currentPlayer.setAttribute("player", player);
   checkWin(cellToPaint);
 }
 
@@ -41,157 +47,61 @@ for (let iColumn = 0; iColumn < columns.length; iColumn++) {
 }
 
 function checkWin(current) {
-  // in order to check successfully you have to do the following:
-  //   for the right or left check:
-  //      get the last piece in teh right or the left order and from it check for 3 to the right and 3 to the left (if could specify in which order the piece you pur was placed chose in that direction)
-  //      Example: "1", "1", "0", "1";
-  //      If the player chose the 0 sport the current algorithms won't be able to detect this win and you should work with the upper one to do it correctly.
   let currentPlayer = current.attributes.player.value;
-  let col = gameGrid.findIndex((arr) => arr.includes(current));
-  let row = gameGrid[col].indexOf(current);
-  let gridCol = gameGrid[col];
-  let piecesInRow = 1;
-  // will make 7 checks (right, left, bottom, bottom-right, bottom-left, top-right, top-left)
-  // check bottom
-  for (let currentRow = row + 1; currentRow < row + 4; currentRow++) {
-    console.log("%cthe bottom check", "color: green; font-size: 16px;");
-    if (gridCol[currentRow]) {
-      if (gridCol[currentRow].attributes.player.value == currentPlayer) {
-        piecesInRow++;
-      } else {
-        // console.log("doesn't have 3 other pieces in bottom");
-        piecesInRow = 1;
-        // break;
-      }
-      if (piecesInRow == 4) {
-        youWon(currentPlayer);
-        console.log(piecesInRow);
-        console.log(
-          `currentRow: ${currentRow}, gridCol: ${gridCol}, won from bottom`
-        );
-      }
-    } else {
-      // break;
-      piecesInRow = 1;
+  // check vertically
+  for (let col = 0; col < 7; col++) {
+    for (let row = 0; row < 3; row++) {
+      isFinal(
+        gameGrid[col][row].attributes.player.value,
+        gameGrid[col][row + 1].attributes.player.value,
+        gameGrid[col][row + 2].attributes.player.value,
+        gameGrid[col][row + 3].attributes.player.value,
+        currentPlayer
+      );
     }
   }
-  // Check Right
-  for (let currentCol = col + 1; currentCol < col + 4; currentCol++) {
-    console.log("%cthe right check", "color: blue; font-size: 16px;");
-    if (gameGrid[currentCol]) {
-      if (gameGrid[currentCol][row].attributes.player.value == currentPlayer) {
-        piecesInRow++;
-      } else {
-        piecesInRow = 1;
-        // break;
-      }
-      if (piecesInRow == 4) {
-        youWon(currentPlayer);
-        console.log(
-          `currentCol: ${currentCol}, row: ${row}, won from right, piecesInRow: ${piecesInRow}`
-        );
-      }
-    } else {
-      // break;
-      piecesInRow = 1;
+  // check horizontally
+  for (let row = 5; row > -1; row--) {
+    for (let col = 0; col < 4; col++) {
+      isFinal(
+        gameGrid[col][row].attributes.player.value,
+        gameGrid[col + 1][row].attributes.player.value,
+        gameGrid[col + 2][row].attributes.player.value,
+        gameGrid[col + 3][row].attributes.player.value,
+        currentPlayer
+      );
     }
   }
-  // Check Left
-  for (let currentCol = col - 1; currentCol > col - 4; currentCol--) {
-    console.log("%cthe left check", "color: red; font-size: 16px;");
-    // console.log(`currentCol: ${currentCol}, the col is: ${col}`);
-    if (gameGrid[currentCol]) {
-      // console.log(gameGrid[currentCol]);
-      if (gameGrid[currentCol][row].attributes.player.value == currentPlayer) {
-        piecesInRow++;
-      } else {
-        piecesInRow = 1;
-        // break;
-      }
-      if (piecesInRow == 4) {
-        youWon(currentPlayer);
-        console.log(
-          `currentCol: ${currentCol}, row: ${row}, won from left, piecesInRow: ${piecesInRow}`
-        );
-      }
-    } else {
-      // break;
-      piecesInRow = 1;
+  // diagonals [north-east, south-east, north-west, south-west]
+  // check north-east:
+  for (let col = 0; col < 4; col++) {
+    for (let row = 5; row > 2; row--) {
+      isFinal(
+        gameGrid[col][row].attributes.player.value,
+        gameGrid[col + 1][row - 1].attributes.player.value,
+        gameGrid[col + 2][row - 2].attributes.player.value,
+        gameGrid[col + 3][row - 3].attributes.player.value,
+        currentPlayer
+      );
     }
   }
+  // Check north-west
+  for (let col = 0; col < 4; col++) {
+    for (let row = 0; row < 3; row++) {
+      isFinal(
+        gameGrid[col][row].attributes.player.value,
+        gameGrid[col + 1][row + 1].attributes.player.value,
+        gameGrid[col + 2][row + 2].attributes.player.value,
+        gameGrid[col + 3][row + 3].attributes.player.value,
+        currentPlayer
+      );
+    }
+  }
+  // check south-east
 }
 
-// === From AI:
-
-// function checkWin(current) {
-//   const currentPlayer = current.attributes.player.value;
-//   const col = gameGrid.findIndex((arr) => arr.includes(current));
-//   const row = gameGrid[col].indexOf(current);
-
-//   // Check horizontal
-//   let count = 0;
-//   for (let i = Math.max(0, col - 3); i <= Math.min(3, col); i++) {
-//     console.log(gameGrid[i][row]);
-//     if (gameGrid[row][i].attributes.player.value === currentPlayer) {
-//       count++;
-//       if (count === 4) {
-//         youWon(currentPlayer);
-//         return;
-//       }
-//     } else {
-//       count = 0;
-//     }
-//   }
-
-//   // Check vertical
-//   count = 0;
-//   for (let j = Math.max(0, row - 3); j <= Math.min(2, row); j++) {
-//     if (gameGrid[j][col].attributes.player.value === currentPlayer) {
-//       count++;
-//       if (count === 4) {
-//         youWon(currentPlayer);
-//         return;
-//       }
-//     } else {
-//       count = 0;
-//     }
-//   }
-
-//   // Check diagonal (top-left to bottom-right)
-//   count = 0;
-//   const startOffset = Math.min(col, row, 3);
-//   const endOffset = Math.min(6 - col, 5 - row, 3);
-//   for (let k = startOffset; k <= endOffset; k++) {
-//     if (gameGrid[row - k][col - k].attributes.player.value === currentPlayer) {
-//       count++;
-//       if (count === 4) {
-//         youWon(currentPlayer);
-//         return;
-//       }
-//     } else {
-//       count = 0;
-//     }
-//   }
-
-//   // Check diagonal (bottom-left to top-right)
-//   count = 0;
-//   const startOffset2 = Math.min(col, 5 - row, 3);
-//   const endOffset2 = Math.min(6 - col, row, 3);
-//   for (let l = startOffset2; l <= endOffset2; l++) {
-//     if (gameGrid[row - l][col + l].attributes.player.value === currentPlayer) {
-//       count++;
-//       if (count === 4) {
-//         youWon(currentPlayer);
-//         return;
-//       }
-//     } else {
-//       count = 0;
-//     }
-//   }
-// }
-
 function youWon(currentPlayer) {
-  console.log(`You Won Playerl ${currentPlayer}`);
+  console.log(`You Won Player ${currentPlayer}`);
   document.body.setAttribute("finished", "true");
   document.getElementById("winPlayer").innerHTML = currentPlayer;
   if (currentPlayer == 1) {
@@ -199,6 +109,13 @@ function youWon(currentPlayer) {
   }
   if (currentPlayer == 2) {
     document.getElementById("lostPlayer").innerHTML = 1;
+  }
+}
+
+function isFinal(a, b, c, d, player) {
+  if (a != 0 && a == b && b == c && c == d) {
+    console.log("you won form isFinal");
+    youWon(player);
   }
 }
 

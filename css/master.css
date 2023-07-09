@@ -9,6 +9,41 @@ body {
   text-transform: capitalize;
 }
 
+main {
+  position: relative;
+}
+
+#currentPlayer {
+  position: absolute;
+  padding: 7px;
+  top: 0px;
+  border-radius: 15px;
+  left: 10px;
+  background-color: rgb(31, 41, 5);
+  transition: 0.4s;
+}
+
+#currentPlayer[player="1"] {
+  color: red;
+}
+
+#currentPlayer::after {
+  display: inline-block;
+  padding-left: 7px;
+}
+
+#currentPlayer[player="1"]::after {
+  content: "1";
+}
+
+#currentPlayer[player="2"] {
+  color: yellow;
+}
+
+#currentPlayer[player="2"]::after {
+  content: "2";
+}
+
 #gameContainer {
   display: grid;
   grid-template: repeat(1, 1fr) / repeat(7, 1fr);
