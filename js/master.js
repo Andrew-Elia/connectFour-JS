@@ -1,10 +1,5 @@
 let columns = document.getElementsByClassName("column");
 let player = 1;
-let allCells = document.getElementsByClassName("cell");
-
-for (let i = 0; i < allCells.length; i++) {
-  allCells[i].setAttribute("player", 0);
-}
 
 for (let i = 0; i < columns.length; i++) {
   columns[i].addEventListener("click", () => {
