@@ -85,10 +85,15 @@ main {
 .cell .piece {
   opacity: 0;
   border-radius: 50%;
-  transition: 0.4s;
+  transition: 0.4s, 0.5s transform ease-in-out;
   display: flex;
   align-items: center;
   justify-content: center;
+  transform: translateY(calc((700 / (700 / 6) * (90vw / 6)) * -1));
+}
+
+.cell[checked="true"] .piece {
+  transform: translateY(0);
 }
 
 .cell .piece::after {
@@ -120,7 +125,7 @@ main {
 
 #winModal {
   visibility: hidden;
-  transition-duration: 0.6s;
+  transition-duration: 1s;
   position: fixed;
 }
 
