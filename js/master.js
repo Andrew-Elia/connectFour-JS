@@ -1,9 +1,29 @@
 let columns = document.getElementsByClassName("column");
 let player = 1;
 
+function checkClickOrKeyboard(event) {
+  if (event.type === "click") {
+    return true;
+  } else if (event.type === "keypress") {
+    var code = event.charCode || event.keyCode;
+    if (code === 32 || code === 13) {
+      return true;
+    }
+  } else {
+    return false;
+  }
+}
+
 for (let i = 0; i < columns.length; i++) {
-  columns[i].addEventListener("click", () => {
-    clicked(columns[i]);
+  columns[i].addEventListener("click", (event) => {
+    if (checkClickOrKeyboard(event) === true) {
+      clicked(columns[i]);
+    }
+  });
+  columns[i].addEventListener("keypress", (event) => {
+    if (checkClickOrKeyboard(event) === true) {
+      clicked(columns[i]);
+    }
   });
 }
 

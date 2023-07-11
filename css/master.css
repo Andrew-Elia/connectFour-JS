@@ -68,7 +68,8 @@ main {
   position: relative;
 }
 
-.column:hover .cell {
+.column:hover .cell,
+.column:focus .cell {
   background-color: rgb(11, 206, 131);
 }
 
